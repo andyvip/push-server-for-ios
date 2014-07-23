@@ -26,6 +26,8 @@ def push_cmccdali(request):
 
     def send_gcm(title, android_tokens):
 
+        if android_tokens.__len__() == 0:
+            return
         API_KEY = "AIzaSyD8fBIglR0mjQRYp2MNhMf4EOB0Yns1BQU"
         gcm = GCM(API_KEY)
         data = {
