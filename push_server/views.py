@@ -13,7 +13,18 @@ here = os.path.abspath(os.path.dirname(__file__))
 @view_config(route_name='push_cmccdali', renderer='json')
 def push_cmccdali(request):
 
-    def send_apn(title, ios_tokens):
+    def send_apn(title, tokens):
+        #ios_tokens = map(lambda x: if tokens.count(x) == 1, tokens)
+
+        def removeDuplicate(s):
+            s.sort()
+            for i in s:
+                while s.count(i) > 1:
+                    s.remove(i)
+            return s
+        ios_tokens = removeDuplicate(tokens)
+
+        print ios_tokens
         cert = os.path.join(here, 'certs/cmccdali.pem')
         apns = APNs(use_sandbox=False, cert_file=cert, key_file=cert)
         frame = Frame()
@@ -59,6 +70,5 @@ def push_cmccdali(request):
     except ValueError:
         return {"status_code": 1, "status_msg": "json_body error"}
 
-    print data
     send_apn(data["title"], data["iphone_takens"])
-    send_gcm(data["title"], data["andriod_takens"])
+    #send_gcm(data["title"], data["andriod_takens"])
